@@ -1,56 +1,44 @@
-const claude = require('../config/claude');
+const genAI = require('../config/claude');
 const logger = require('../utils/logger');
 
-const ClaudeService = {
+const GeminiService = {
   /**
-   * Send images + prompt to Claude Vision API for evaluation.
+   * Send images + prompt to Gemini Vision API for evaluation.
    * @param {string} prompt - The evaluation prompt text
    * @param {Array<{type: string, data: string}>} images - Base64 encoded images
-   * @returns {string} Raw text response from Claude
+   * @returns {string} Raw text response from Gemini
    */
   async evaluate(prompt, images = []) {
-    const content = [];
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
-    // Add images as base64 content blocks
+    const parts = [];
+
+    // Add images as inline data
     for (const img of images) {
-      content.push({
-        type: 'image',
-        source: {
-          type: 'base64',
-          media_type: img.type,
+      parts.push({
+        inlineData: {
+          mimeType: img.type,
           data: img.data,
         },
       });
     }
 
-    // Add the text prompt
-    content.push({ type: 'text', text: prompt });
+    // Add text prompt
+    parts.push({ text: prompt });
 
-    logger.info(`Sending ${images.length} image(s) to Claude for evaluation`);
+    logger.info(`Sending ${images.length} image(s) to Gemini for evaluation`);
 
-    const response = await claude.messages.create({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 4096,
-      messages: [
-        {
-          role: 'user',
-          content,
-        },
-      ],
-    });
+    const result = await model.generateContent(parts);
+    const response = result.response;
+    const text = response.text();
 
-    const textBlock = response.content.find((block) => block.type === 'text');
-
-    if (!textBlock) {
-      throw new Error('No text response from Claude');
+    if (!text) {
+      throw new Error('No text response from Gemini');
     }
 
-    logger.info('Claude evaluation response received', {
-      inputTokens: response.usage.input_tokens,
-      outputTokens: response.usage.output_tokens,
-    });
+    logger.info('Gemini evaluation response received');
 
-    return textBlock.text;
+    return text;
   },
 
   /**
@@ -61,4 +49,4 @@ const ClaudeService = {
   },
 };
 
-module.exports = ClaudeService;
+module.exports = GeminiService;

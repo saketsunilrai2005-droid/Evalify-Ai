@@ -6,7 +6,7 @@ dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
 
 const required = [
   'PORT',
-  'ANTHROPIC_API_KEY',
+  'GEMINI_API_KEY',
   'SUPABASE_URL',
   'SUPABASE_SERVICE_KEY',
   'JWT_SECRET',
@@ -21,7 +21,7 @@ if (missing.length > 0) {
 
 module.exports = {
   PORT: parseInt(process.env.PORT, 10) || 5000,
-  ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY,
   SUPABASE_URL: process.env.SUPABASE_URL,
   SUPABASE_SERVICE_KEY: process.env.SUPABASE_SERVICE_KEY,
   JWT_SECRET: process.env.JWT_SECRET,
