@@ -16,7 +16,7 @@ async function register(req, res, next) {
     }
 
     // Check if user exists
-    const { data: existing } = await supabase
+    const { data: existing, error: checkError } = await supabase
       .from('users')
       .select('id')
       .eq('email', email)
@@ -24,6 +24,11 @@ async function register(req, res, next) {
 
     if (existing) {
       return res.status(409).json({ error: 'Email already registered' });
+    }
+
+    if (checkError && checkError.code !== 'PGRST116') {
+      // PGRST116 means no rows found, which is expected
+      throw checkError;
     }
 
     // Hash password
