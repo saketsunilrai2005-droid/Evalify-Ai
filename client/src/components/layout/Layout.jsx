@@ -26,7 +26,7 @@ const Layout = () => {
       
       <main className="lg:ml-64 flex-1 min-h-screen relative transition-all duration-300">
         <Navbar onMenuClick={() => setSidebarOpen(true)} />
-        <div className="pt-24 px-4 sm:px-8 pb-12 w-full overflow-x-hidden">
+        <div className="pt-16 sm:pt-24 px-3 sm:px-4 md:px-8 pb-8 sm:pb-12 w-full overflow-x-hidden">
           <div key={location.pathname} className="animate-page-in">
             <Outlet />
           </div>

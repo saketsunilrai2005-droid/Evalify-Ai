@@ -38,13 +38,13 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-full">
-      <div className="mb-10">
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-on-surface tracking-tight mb-2 font-headline">Academic Dashboard</h1>
-        <p className="text-on-surface-variant text-sm sm:text-base">Welcome back, {user?.name || 'Professor'}. Here is your evaluation summary.</p>
+      <div className="mb-6 sm:mb-10">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-on-surface tracking-tight mb-1 sm:mb-2 font-headline">Academic Dashboard</h1>
+        <p className="text-on-surface-variant text-xs sm:text-sm md:text-base">Welcome back, {user?.name || 'Professor'}. Here is your evaluation summary.</p>
       </div>
 
       {/* Stats Grid — Real Data */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
+      <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-6 mb-8 sm:mb-10">
         <ScoreCard label="Total Exams" value={String(totalExams)} icon="menu_book" color="primary" subValue="All Time" />
         <ScoreCard label="Completed" value={String(completedExams)} icon="task_alt" color="secondary" subValue={totalExams > 0 ? `${Math.round((completedExams / totalExams) * 100)}%` : '—'} />
         <ScoreCard label="Pending" value={String(pendingExams)} icon="pending_actions" color="error" subValue={pendingExams > 0 ? 'In Progress' : 'None'} />
@@ -52,12 +52,12 @@ const Dashboard = () => {
       </div>
 
       {/* Chart Area + Quick Actions */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
-        <div className="lg:col-span-2 bg-white rounded-xl p-6 atmospheric-shadow border border-outline-variant/10">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-10">
+        <div className="lg:col-span-2 bg-white rounded-xl p-4 sm:p-6 atmospheric-shadow border border-outline-variant/10">
           <div className="flex justify-between items-center mb-6">
             <h3 className="font-headline font-bold text-sm">Quick Actions</h3>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
             <button 
               onClick={() => navigate('/create-exam')}
               className="p-6 rounded-xl bg-primary/5 hover:bg-primary/10 transition-colors text-left group"
@@ -113,8 +113,8 @@ const Dashboard = () => {
 
       {/* Recent Exams Table — Real Data */}
       <div>
-        <div className="flex justify-between items-center mb-5">
-          <h2 className="text-xl font-bold tracking-tight font-headline">Recent Exams</h2>
+        <div className="flex justify-between items-center mb-4 sm:mb-5">
+          <h2 className="text-lg sm:text-xl font-bold tracking-tight font-headline">Recent Exams</h2>
           <button onClick={() => navigate('/exams')} className="text-primary font-bold text-xs flex items-center gap-1 hover:underline">
             View All <span className="material-symbols-outlined text-sm">arrow_forward</span>
           </button>
@@ -127,35 +127,35 @@ const Dashboard = () => {
                 <Spinner size="lg" />
               </div>
             ) : exams.length > 0 ? (
-              <table className="w-full text-left border-collapse min-w-[600px]">
+              <table className="w-full text-left border-collapse min-w-[400px]">
                 <thead>
                   <tr className="bg-surface-container-low/50 text-[10px] uppercase tracking-widest font-bold text-outline">
-                    <th className="px-6 py-3.5">Exam</th>
-                    <th className="px-6 py-3.5">Subject</th>
-                    <th className="px-6 py-3.5">Marks</th>
-                    <th className="px-6 py-3.5">Status</th>
-                    <th className="px-6 py-3.5 text-right">Action</th>
+                    <th className="px-3 sm:px-6 py-3 sm:py-3.5">Exam</th>
+                    <th className="px-3 sm:px-6 py-3 sm:py-3.5 hidden sm:table-cell">Subject</th>
+                    <th className="px-3 sm:px-6 py-3 sm:py-3.5">Marks</th>
+                    <th className="px-3 sm:px-6 py-3 sm:py-3.5">Status</th>
+                    <th className="px-3 sm:px-6 py-3 sm:py-3.5 text-right">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-outline-variant/10">
                   {exams.slice(0, 5).map((exam) => (
                     <tr key={exam.id} onClick={() => navigate(`/exams/${exam.id}`)} className="hover:bg-surface-container-low/50 transition-colors cursor-pointer group">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <span className="material-symbols-outlined text-primary/40 group-hover:text-primary transition-colors">description</span>
-                          <p className="font-semibold text-sm text-on-surface">{exam.title || exam.name}</p>
+                      <td className="px-3 sm:px-6 py-3 sm:py-4">
+                        <div className="flex items-center gap-2 sm:gap-3">
+                          <span className="material-symbols-outlined text-primary/40 group-hover:text-primary transition-colors text-lg sm:text-2xl">description</span>
+                          <p className="font-semibold text-xs sm:text-sm text-on-surface truncate max-w-[120px] sm:max-w-none">{exam.title || exam.name}</p>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm text-on-surface-variant">{exam.subject}</td>
-                      <td className="px-6 py-4 text-sm text-on-surface-variant font-medium">{exam.total_marks}</td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <span className={`w-1.5 h-1.5 rounded-full ${statusColors[exam.status] || 'bg-gray-400'}`}></span>
-                          <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">{statusLabels[exam.status] || exam.status}</span>
+                      <td className="px-3 sm:px-6 py-3 sm:py-4 text-sm text-on-surface-variant hidden sm:table-cell">{exam.subject}</td>
+                      <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-on-surface-variant font-medium">{exam.total_marks}</td>
+                      <td className="px-3 sm:px-6 py-3 sm:py-4">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
+                          <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${statusColors[exam.status] || 'bg-gray-400'}`}></span>
+                          <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">{statusLabels[exam.status] || exam.status}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-right">
-                        <button className="p-1.5 hover:bg-surface-container-highest rounded-lg text-outline-variant hover:text-primary transition-colors">
+                      <td className="px-3 sm:px-6 py-3 sm:py-4 text-right">
+                        <button className="p-1 sm:p-1.5 hover:bg-surface-container-highest rounded-lg text-outline-variant hover:text-primary transition-colors">
                           <span className="material-symbols-outlined text-lg">chevron_right</span>
                         </button>
                       </td>

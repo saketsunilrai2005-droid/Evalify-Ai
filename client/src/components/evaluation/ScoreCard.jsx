@@ -39,17 +39,17 @@ const ScoreCard = ({ label, value, subValue, icon, color = 'primary', noBg = fal
   };
 
   return (
-    <div className="bg-white p-5 sm:p-6 rounded-[1.5rem] atmospheric-shadow border border-outline-variant/10 flex flex-col justify-between h-full min-h-[160px] group hover:-translate-y-1 hover:shadow-md transition-all relative overflow-hidden">
+    <div className="bg-white p-3.5 sm:p-5 md:p-6 rounded-xl sm:rounded-[1.5rem] atmospheric-shadow border border-outline-variant/10 flex flex-col justify-between h-full min-h-[120px] sm:min-h-[160px] group hover:-translate-y-1 hover:shadow-md transition-all relative overflow-hidden">
       
       {/* Top Section: Icon */}
-      <div className="mb-6 relative z-10">
+      <div className="mb-3 sm:mb-6 relative z-10">
         {!noBg ? (
-          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm ${colors[color]}`}>
-            <span className="material-symbols-outlined text-2xl font-variation-fill">{icon}</span>
+          <div className={`w-9 h-9 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-sm ${colors[color]}`}>
+            <span className="material-symbols-outlined text-lg sm:text-2xl font-variation-fill">{icon}</span>
           </div>
         ) : (
-          <div className={`w-12 h-12 flex items-center justify-center ${textColors[color] || 'text-on-surface'}`}>
-            <span className="material-symbols-outlined text-4xl font-variation-fill">{icon}</span>
+          <div className={`w-9 h-9 sm:w-12 sm:h-12 flex items-center justify-center ${textColors[color] || 'text-on-surface'}`}>
+            <span className="material-symbols-outlined text-2xl sm:text-4xl font-variation-fill">{icon}</span>
           </div>
         )}
       </div>
@@ -62,7 +62,7 @@ const ScoreCard = ({ label, value, subValue, icon, color = 'primary', noBg = fal
             {value}
           </span>
         ) : (
-          <h3 className="text-3xl font-black font-headline text-on-surface leading-none">{value}</h3>
+          <h3 className="text-xl sm:text-3xl font-black font-headline text-on-surface leading-none">{value}</h3>
         )}
         <p className="text-[10px] font-bold uppercase tracking-widest text-outline leading-tight mt-1 break-words">
           {label}
