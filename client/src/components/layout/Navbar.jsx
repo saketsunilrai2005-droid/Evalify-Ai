@@ -36,16 +36,16 @@ const Navbar = ({ onMenuClick }) => {
   };
 
   return (
-    <header className="fixed top-0 right-0 w-full lg:w-[calc(100%-16rem)] z-40 flex justify-between items-center px-4 sm:px-8 py-3 bg-surface/80 backdrop-blur-xl font-headline text-sm transition-all duration-300">
-      <div className="flex items-center gap-4 sm:gap-8">
+    <header className="fixed top-0 right-0 w-full lg:w-[calc(100%-16rem)] z-40 flex justify-between items-center px-3 sm:px-4 md:px-8 py-2.5 sm:py-3 bg-surface/80 backdrop-blur-xl font-headline text-sm transition-all duration-300">
+      <div className="flex items-center gap-3 sm:gap-4 md:gap-8 min-w-0">
         <button
-          className="lg:hidden p-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors"
+          className="lg:hidden p-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors flex-shrink-0"
           onClick={onMenuClick}
         >
           <span className="material-symbols-outlined">menu</span>
         </button>
         <h2
-          className="text-lg font-black text-on-surface truncate max-w-[140px] sm:max-w-none cursor-pointer hover:text-primary transition-colors"
+          className="text-base sm:text-lg font-black text-on-surface truncate max-w-[120px] sm:max-w-[200px] md:max-w-none cursor-pointer hover:text-primary transition-colors"
           onClick={() => navigate('/dashboard')}
         >
           {getPageTitle()}
@@ -66,13 +66,21 @@ const Navbar = ({ onMenuClick }) => {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 sm:gap-4 relative">
+      <div className="flex items-center gap-1.5 sm:gap-2 md:gap-4 relative flex-shrink-0">
         <button
           onClick={() => navigate('/create-exam')}
           className="hidden md:flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-lg font-bold text-xs hover:opacity-90 active:scale-95 transition-all shadow-sm"
         >
           <span className="material-symbols-outlined text-sm">add</span>
           New Exam
+        </button>
+
+        {/* Mobile-only quick add button */}
+        <button
+          onClick={() => navigate('/create-exam')}
+          className="md:hidden p-2 bg-primary text-on-primary rounded-lg hover:opacity-90 active:scale-95 transition-all shadow-sm"
+        >
+          <span className="material-symbols-outlined text-lg">add</span>
         </button>
 
         <div className="relative">
@@ -85,25 +93,29 @@ const Navbar = ({ onMenuClick }) => {
           </button>
           
           {showNotifs && (
-            <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-outline-variant/10 overflow-hidden z-50 animate-slide-up">
-              <div className="p-3 border-b border-outline-variant/10 bg-surface-container-lowest flex justify-between items-center">
-                <span className="font-bold text-xs uppercase tracking-widest text-outline">Notifications</span>
-                <span className="text-[10px] bg-error/10 text-error px-2 py-0.5 rounded-full font-bold">1 New</span>
+            <>
+              {/* Backdrop to close on mobile */}
+              <div className="fixed inset-0 z-40 sm:hidden" onClick={() => setShowNotifs(false)} />
+              <div className="fixed sm:absolute left-2 right-2 sm:left-auto sm:right-0 top-14 sm:top-auto sm:mt-2 w-auto sm:w-72 bg-white rounded-xl shadow-xl border border-outline-variant/10 overflow-hidden z-50 animate-slide-up">
+                <div className="p-3 border-b border-outline-variant/10 bg-surface-container-lowest flex justify-between items-center">
+                  <span className="font-bold text-xs uppercase tracking-widest text-outline">Notifications</span>
+                  <span className="text-[10px] bg-error/10 text-error px-2 py-0.5 rounded-full font-bold">1 New</span>
+                </div>
+                <div className="p-3 hover:bg-surface-container-low cursor-pointer transition-colors" onClick={() => { setShowNotifs(false); navigate('/evaluation-progress'); }}>
+                  <p className="text-xs font-bold text-on-surface">Evaluation Complete</p>
+                  <p className="text-[10px] text-on-surface-variant mt-1">CS-101 Midterm has finished grading. View results.</p>
+                </div>
               </div>
-              <div className="p-3 hover:bg-surface-container-low cursor-pointer transition-colors" onClick={() => { setShowNotifs(false); navigate('/evaluation-progress'); }}>
-                <p className="text-xs font-bold text-on-surface">Evaluation Complete</p>
-                <p className="text-[10px] text-on-surface-variant mt-1">CS-101 Midterm has finished grading. View results.</p>
-              </div>
-            </div>
+            </>
           )}
         </div>
 
         <button
           onClick={handleExport}
-          className="hidden sm:flex items-center gap-1.5 px-4 py-2 bg-surface-container-high text-on-surface-variant rounded-lg font-bold text-xs hover:bg-surface-container-highest transition-all"
+          className="hidden sm:flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-surface-container-high text-on-surface-variant rounded-lg font-bold text-xs hover:bg-surface-container-highest transition-all"
         >
           <span className="material-symbols-outlined text-sm">download</span>
-          Export
+          <span className="hidden md:inline">Export</span>
         </button>
       </div>
     </header>
