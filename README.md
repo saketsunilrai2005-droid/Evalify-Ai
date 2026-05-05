@@ -116,8 +116,8 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 📌 Project Status
 
-**Current Version**: 1.1.0 (Refactored Auth & Live Evaluation Flow)  
-**Status**: Active Development  
+**Current Version** : 1.1.0 (Refactored Auth & Live Evaluation Flow)  
+**Status** : Active Development  
 
 ---
 Developed with ❤️ by the Evalify AI Team.
