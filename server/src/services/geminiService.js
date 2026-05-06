@@ -41,6 +41,7 @@ const GeminiService = {
 
     // Add images as inline data
     for (const img of images) {
+      logger.info(`Adding image to request: type=${img.type}, size=${img.data.length} chars`);
       parts.push({
         inlineData: {
           mimeType: img.type,
@@ -52,7 +53,7 @@ const GeminiService = {
     // Add text prompt
     parts.push({ text: prompt });
 
-    logger.info(`Sending ${images.length} image(s) to Gemini for evaluation`);
+    logger.info(`Sending ${images.length} image(s) + prompt (${prompt.length} chars) to Gemini for evaluation`);
 
     // Try each model with retries
     for (const modelName of MODELS) {
@@ -64,16 +65,18 @@ const GeminiService = {
           const response = result.response;
           const text = response.text();
 
-          if (!text) {
-            throw new Error('No text response from Gemini');
+          if (!text || text.trim() === '') {
+            throw new Error('Empty response from Gemini. The model may have rejected the input.');
           }
 
           logger.info(`Gemini response received (model: ${modelName}, ${text.length} chars)`);
+          logger.debug(`Response preview: ${text.substring(0, 300)}...`);
+          
           return text;
         } catch (err) {
           const errMsg = err.message || '';
           const isRateLimit = errMsg.includes('429') || errMsg.includes('quota') || errMsg.includes('Too Many Requests') || errMsg.includes('RESOURCE_EXHAUSTED');
-          const isAuthError = errMsg.includes('UNAUTHENTICATED') || errMsg.includes('401') || errMsg.includes('invalid API key');
+          const isAuthError = errMsg.includes('UNAUTHENTICATED') || errMsg.includes('401') || errMsg.includes('invalid API key') || errMsg.includes('API key');
 
           logger.warn(`Gemini error on ${modelName} attempt ${attempt}: ${errMsg.substring(0, 200)}`);
 

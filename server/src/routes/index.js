@@ -5,6 +5,7 @@ const evaluateRoutes = require('./evaluate.routes');
 const resultsRoutes = require('./results.routes');
 const quotaRoutes = require('./quota.routes');
 const GeminiService = require('../services/geminiService');
+const ExamModel = require('../models/exam.model');
 const logger = require('../utils/logger');
 
 const router = Router();
@@ -38,6 +39,32 @@ router.get('/health/gemini', async (req, res, next) => {
       gemini: false,
       error: err.message 
     });
+  }
+});
+
+// Diagnostic endpoint for failed exams
+router.get('/diagnostics/exam/:examId', async (req, res, next) => {
+  try {
+    const exam = await ExamModel.findById(req.params.examId);
+    if (!exam) {
+      return res.status(404).json({ error: 'Exam not found' });
+    }
+
+    res.json({
+      examId: exam.id,
+      title: exam.title,
+      subject: exam.subject,
+      totalMarks: exam.total_marks,
+      status: exam.status,
+      hasRubric: !!exam.rubric && exam.rubric.length > 0,
+      rubricLength: exam.rubric?.length || 0,
+      questionsCount: (exam.questions || []).length,
+      hasQuestionPaper: (exam.questions || []).some(q => q.type === 'extracted_text'),
+      questionPaperLength: (exam.questions || []).find(q => q.type === 'extracted_text')?.text?.length || 0,
+      createdAt: exam.created_at,
+    });
+  } catch (err) {
+    next(err);
   }
 });
 

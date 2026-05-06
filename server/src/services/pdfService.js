@@ -14,9 +14,8 @@ const PdfService = {
   },
 
   /**
-   * Convert PDF pages to base64 images for Claude Vision.
-   * Since pdf-parse doesn't render pages as images, we read the raw PDF
-   * and send it as-is (Claude supports PDF input).
+   * Convert PDF pages to base64 images for Gemini Vision.
+   * Gemini supports PDF format natively via application/pdf MIME type.
    */
   async toBase64(filePath) {
     const buffer = fs.readFileSync(filePath);
@@ -24,8 +23,6 @@ const PdfService = {
 
     let mediaType;
     if (ext === '.pdf') {
-      // Claude doesn't directly support PDF as image, so we'll handle this
-      // by converting or using image files instead
       mediaType = 'application/pdf';
     } else if (ext === '.jpg' || ext === '.jpeg') {
       mediaType = 'image/jpeg';
@@ -37,9 +34,14 @@ const PdfService = {
       throw new Error(`Unsupported file type: ${ext}`);
     }
 
+    const base64 = buffer.toString('base64');
+    
+    // Log file info for debugging
+    logger.info(`Converted ${path.basename(filePath)} to base64 (type: ${mediaType}, size: ${base64.length} chars)`);
+
     return {
       type: mediaType,
-      data: buffer.toString('base64'),
+      data: base64,
     };
   },
 
