@@ -17,21 +17,13 @@ const Dashboard = () => {
     fetchQuota();
   }, [fetchExams, fetchQuota]);
 
-  // Center the dashboard content on mount
+  // Scroll to top on mount
   useEffect(() => {
-    setTimeout(() => {
-      const mainContent = document.querySelector('main');
-      if (mainContent) {
-        const contentHeight = mainContent.offsetHeight;
-        const windowHeight = window.innerHeight;
-        const scrollTo = Math.max(0, (contentHeight - windowHeight) / 2);
-        window.scrollTo({
-          top: scrollTo,
-          left: 0,
-          behavior: 'smooth'
-        });
-      }
-    }, 100);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
   }, []);
 
   // Compute real stats from exams data
