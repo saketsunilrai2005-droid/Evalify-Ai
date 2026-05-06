@@ -3,9 +3,9 @@ const logger = require('../utils/logger');
 const { GEMINI_API_KEY } = require('../config/env');
 
 const MODELS = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-2.0-flash-lite'];
-const MAX_RETRIES = 3;
-const RETRY_DELAY_MS = 45000; // 45 seconds
-const CALL_TIMEOUT_MS = 60000; // 60 seconds
+const MAX_RETRIES = 5;
+const RETRY_DELAY_MS = 90000; // 90 seconds
+const CALL_TIMEOUT_MS = 120000; // 120 seconds
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -76,6 +76,7 @@ const GeminiService = {
         } catch (err) {
           const errMsg = err.message || '';
           const isRateLimit = errMsg.includes('429') || errMsg.includes('quota') || errMsg.includes('Too Many Requests') || errMsg.includes('RESOURCE_EXHAUSTED');
+          const isOverloaded = errMsg.includes('503') || errMsg.includes('Service Unavailable') || errMsg.includes('high demand');
           const isAuthError = errMsg.includes('UNAUTHENTICATED') || errMsg.includes('401') || errMsg.includes('invalid API key') || errMsg.includes('API key');
 
           logger.warn(`Gemini error on ${modelName} attempt ${attempt}: ${errMsg.substring(0, 200)}`);
@@ -84,14 +85,15 @@ const GeminiService = {
             throw new Error(`Gemini API authentication failed. Check your GEMINI_API_KEY in .env file. Details: ${errMsg.substring(0, 100)}`);
           }
 
-          if (isRateLimit && attempt < MAX_RETRIES) {
-            logger.warn(`Rate limited. Retrying in ${RETRY_DELAY_MS / 1000}s...`);
+          if ((isRateLimit || isOverloaded) && attempt < MAX_RETRIES) {
+            const delaySeconds = RETRY_DELAY_MS / 1000;
+            logger.warn(`${isOverloaded ? 'Overloaded (503)' : 'Rate limited (429)'}. Retrying in ${delaySeconds}s (attempt ${attempt}/${MAX_RETRIES})...`);
             await sleep(RETRY_DELAY_MS);
             continue;
           }
 
-          if (isRateLimit) {
-            logger.warn(`Rate limited on ${modelName}, trying next model...`);
+          if (isRateLimit || isOverloaded) {
+            logger.warn(`${isOverloaded ? 'Overloaded' : 'Rate limited'} on ${modelName}, trying next model...`);
             break;
           }
 
@@ -101,7 +103,7 @@ const GeminiService = {
       }
     }
 
-    throw new Error('All Gemini models exhausted. API quota exceeded.');
+    throw new Error('All Gemini models exhausted. Service is overloaded or quota exceeded. Please try again later.');
   },
 
   /**
