@@ -18,6 +18,15 @@ const EvaluationService = {
     const exam = await ExamModel.findById(examId);
     if (!exam) throw new Error('Exam not found');
 
+    // Validate exam has required data
+    if (!exam.rubric || exam.rubric.trim() === '') {
+      logger.warn(`Exam ${examId} has no rubric. Evaluation may fail.`);
+    }
+
+    if (!exam.questions || exam.questions.length === 0) {
+      logger.warn(`Exam ${examId} has no questions. Evaluation may fail.`);
+    }
+
     const previousStatus = exam.status;
     await ExamModel.updateStatus(examId, 'evaluating');
 
@@ -55,6 +64,14 @@ const EvaluationService = {
       finalStatus = 'failed';
     }
     await ExamModel.updateStatus(examId, finalStatus);
+
+    logger.info(`Batch complete: ${results.length} succeeded, ${errors.length} failed. Final status: ${finalStatus}`, {
+      examId,
+      totalFiles: answerFiles.length,
+      successCount: results.length,
+      failureCount: errors.length,
+      errors: errors.length > 0 ? errors.map(e => e.error).join('; ') : 'none',
+    });
 
     return {
       examId,

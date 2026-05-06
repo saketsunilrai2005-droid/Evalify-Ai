@@ -1,5 +1,6 @@
 const genAI = require('../config/gemini');
 const logger = require('../utils/logger');
+const { GEMINI_API_KEY } = require('../config/env');
 
 const MODELS = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-2.0-flash-lite'];
 const MAX_RETRIES = 3;
@@ -27,6 +28,15 @@ const GeminiService = {
    * @returns {string} Raw text response from Gemini
    */
   async evaluate(prompt, images = []) {
+    // Validate API key
+    if (!GEMINI_API_KEY || GEMINI_API_KEY.trim() === '') {
+      throw new Error('GEMINI_API_KEY is not configured. Please add it to your .env file.');
+    }
+
+    if (GEMINI_API_KEY.length < 20) {
+      throw new Error('GEMINI_API_KEY appears to be invalid (too short). Please check your .env file.');
+    }
+
     const parts = [];
 
     // Add images as inline data
@@ -63,8 +73,13 @@ const GeminiService = {
         } catch (err) {
           const errMsg = err.message || '';
           const isRateLimit = errMsg.includes('429') || errMsg.includes('quota') || errMsg.includes('Too Many Requests') || errMsg.includes('RESOURCE_EXHAUSTED');
+          const isAuthError = errMsg.includes('UNAUTHENTICATED') || errMsg.includes('401') || errMsg.includes('invalid API key');
 
           logger.warn(`Gemini error on ${modelName} attempt ${attempt}: ${errMsg.substring(0, 200)}`);
+
+          if (isAuthError) {
+            throw new Error(`Gemini API authentication failed. Check your GEMINI_API_KEY in .env file. Details: ${errMsg.substring(0, 100)}`);
+          }
 
           if (isRateLimit && attempt < MAX_RETRIES) {
             logger.warn(`Rate limited. Retrying in ${RETRY_DELAY_MS / 1000}s...`);

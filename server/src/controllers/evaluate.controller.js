@@ -33,8 +33,16 @@ async function startEvaluation(req, res, next) {
 
     // Process in background - do not await
     EvaluationService.processBatch(examId, req.files)
-      .then(result => logger.info(`Batch evaluation complete for exam ${examId}`))
-      .catch(err => logger.error(`Batch evaluation failed for exam ${examId}: ${err.message}`));
+      .then(result => {
+        logger.info(`Batch evaluation complete for exam ${examId}`, result);
+      })
+      .catch(err => {
+        logger.error(`Batch evaluation failed for exam ${examId}: ${err.message}`, {
+          error: err.message,
+          stack: err.stack,
+          examId,
+        });
+      });
     
     res.json({
       message: 'Evaluation started',
