@@ -155,7 +155,7 @@ const ExamDetail = () => {
               <span className="material-symbols-outlined text-sm">download</span>
               CSV
             </button>
-            <button 
+            {/* <button 
               onClick={() => {
                 if (exam.status !== 'completed') {
                   navigate('/create-exam');
@@ -167,6 +167,13 @@ const ExamDetail = () => {
             >
               <span className="material-symbols-outlined text-sm">{exam.status === 'completed' ? 'download' : 'replay'}</span>
               {exam.status === 'completed' ? 'PDF' : 'Retry'}
+            </button> */}
+            <button 
+              onClick={() => navigate('/create-exam')}
+              className="flex-1 sm:flex-none bg-primary text-on-primary px-3 sm:px-6 py-2.5 sm:py-3 rounded-lg font-bold shadow-lg shadow-primary/20 flex items-center justify-center gap-1.5 sm:gap-2 hover:opacity-90 transition-all text-xs"
+            >
+              <span className="material-symbols-outlined text-sm">replay</span>
+              Retry
             </button>
           </div>
         </div>
