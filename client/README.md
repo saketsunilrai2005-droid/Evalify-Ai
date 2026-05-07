@@ -53,7 +53,7 @@ client/
 
 ---
 
-## 🎨 Design System
+## 🎨 DESIGN SYSTEM
 
 Based on **Material Design 3** color tokens with a custom editorial aesthetic.
 
@@ -63,14 +63,14 @@ Based on **Material Design 3** color tokens with a custom editorial aesthetic.
 - **Error**: `#ba1a1a`
 - **Surface tiers**: 5 levels from `#ffffff` to `#e0e3e5`
 
-### Design Rules
+### DESIGN RULES
 - **No-Line Rule** — No 1px borders. Use surface-tier background shifts instead.
 - **Atmospheric Shadows** — Soft, layered box-shadows for depth.
 - **Glassmorphism** — `backdrop-blur` on floating elements (navbar, insight rails).
 
 ---
 
-## 📄 Pages
+## 📄 PAGES
 
 | Page | Route | Description |
 |------|-------|-------------|
