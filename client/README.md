@@ -17,7 +17,7 @@
 
 ---
 
-## 📁 Project Structure
+## 📁 PROJECT STRUCTURE
 
 ```
 client/
