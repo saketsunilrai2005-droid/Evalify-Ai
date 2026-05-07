@@ -6,7 +6,7 @@
 [![Gemini AI](https://img.shields.io/badge/AI-Google%20Gemini%202.5-orange)](https://aistudio.google.com/)
 [![Supabase](https://img.shields.io/badge/Database-Supabase-emerald)](https://supabase.com/)
 
-**Evalify AI** is a cutting-edge, full-stack application designed for educators and academic institutions. It leverages state-of-the-art Generative AI (Google Gemini) to automate the evaluation of student answer sheets (handwritten or typed), providing instant grading, semantic analysis, and detailed feedback.
+**Evalify AI** is an advanced full-stack platform built for educators and academic institutions. It utilizes powerful Generative AI (Google Gemini) to streamline the evaluation of student answer sheets—whether handwritten or typed—by delivering instant grading, semantic analysis, and comprehensive feedback.
 
 ---
 
