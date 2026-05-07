@@ -76,7 +76,8 @@ const Landing = () => {
 
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full max-w-md px-2">
           <Button onClick={() => navigate('/signup')} size="lg" className="flex-1 shadow-2xl">Start Evaluating Free</Button>
-          <Button onClick={() => addToast('Opening video player...', 'info')} variant="outline" size="lg" className="flex-1">Watch Demo</Button>
+          {/* <Button onClick={() => addToast('Opening video player...', 'info')} variant="outline" size="lg" className="flex-1">Watch Demo</Button> */}
+          <Button onClick={() => window.open('https://youtu.be/56mqlTIf8Bs?si=H_yLagiFjVqRWUce', '_blank', 'noopener,noreferrer')} variant="outline" size="lg" className="flex-1">Watch Demo</Button>
         </div>
 
         {/* Dashboard Preview */}
