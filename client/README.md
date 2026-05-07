@@ -4,7 +4,7 @@
 
 ---
 
-## 🚀 Tech Stack
+## 🚀 TECH STACK
 
 | Layer | Technology |
 |-------|-----------|
