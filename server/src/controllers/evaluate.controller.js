@@ -19,12 +19,13 @@ async function startEvaluation(req, res, next) {
       return res.status(400).json({ error: 'At least one answer sheet file is required' });
     }
 
-    // Check daily quota
+    // Check quota (daily for free, monthly for paid)
     const quota = await QuotaModel.checkQuota(req.user.id);
     if (!quota.allowed) {
+      const periodLabel = quota.isMonthly ? 'this month' : 'today';
       return res.status(403).json({
-        error: 'Daily free limit reached',
-        message: `You have used all ${quota.limit} free evaluations today. Upgrade your plan for more.`,
+        error: 'Evaluation limit reached',
+        message: `You have used all ${quota.limit} evaluations ${periodLabel}. Upgrade your plan for more.`,
         quota,
       });
     }

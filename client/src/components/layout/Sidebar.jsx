@@ -11,6 +11,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     { name: 'Dashboard', path: '/dashboard', icon: 'grid_view' },
     { name: 'Exams', path: '/exams', icon: 'description' },
     { name: 'Results', path: '/results', icon: 'analytics' },
+    { name: 'Analytics', path: '/analytics', icon: 'monitoring' },
     { name: 'Pricing', path: '/pricing', icon: 'payments' },
     { name: 'Settings', path: '/settings', icon: 'settings' },
   ];
@@ -56,7 +57,7 @@ const Sidebar = ({ isOpen, onClose }) => {
           >
             <div className="relative z-10">
               <p className="text-[10px] font-black uppercase tracking-widest text-secondary mb-1">Upgrade</p>
-              <p className="text-sm font-bold text-on-surface">Go Pro — ₹14,999/mo</p>
+              <p className="text-sm font-bold text-on-surface">Go Pro — ₹2,500/mo</p>
             </div>
             <span className="material-symbols-outlined absolute -right-2 -bottom-2 text-6xl text-secondary/10 group-hover:text-secondary/20 transition-colors">verified</span>
           </NavLink>

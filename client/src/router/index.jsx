@@ -10,6 +10,7 @@ import Settings from '../pages/Settings';
 import Pricing from '../pages/Pricing';
 import EvaluationProgress from '../pages/EvaluationProgress';
 import ExamDetail from '../pages/ExamDetail';
+import Analytics from '../pages/Analytics';
 import NotFound from '../pages/NotFound';
 import Layout from '../components/layout/Layout';
 
@@ -36,6 +37,7 @@ export const router = createBrowserRouter([
       { path: '/exams/:id', element: <ExamDetail /> },
       { path: '/settings', element: <Settings /> },
       { path: '/pricing', element: <Pricing /> },
+      { path: '/analytics', element: <Analytics /> },
       { path: '/evaluation-progress', element: <EvaluationProgress /> },
     ],
   },

@@ -51,29 +51,36 @@ const Pricing = () => {
     {
       name: 'Starter',
       desc: 'For individual faculty members',
-      price: annual ? '₹3,999' : '₹4,999',
+      price: annual ? '₹799' : '₹999',
       period: '/month',
-      save: annual ? 'Save ₹12,000/yr' : null,
-      features: ['100 Exams/month', 'Basic AI Grading', 'PDF Export', 'Email Support', '5GB Storage'],
-      cta: 'Start Free Trial',
+      perPaper: annual ? '₹5.3/paper' : '₹6.6/paper',
+      save: annual ? 'Save ₹2,400/yr' : null,
+      annualTotal: annual ? '₹9,588/yr' : null,
+      features: ['150 AI Evaluations/month', 'Personalized Feedback', 'Rubric Evaluation', 'PDF Export', 'Email Support'],
+      cta: 'Get Started',
     },
     {
       name: 'Professional',
       desc: 'For departments & teams',
-      price: annual ? '₹11,999' : '₹14,999',
+      price: annual ? '₹1,999' : '₹2,499',
       period: '/month',
-      save: annual ? 'Save ₹36,000/yr' : null,
-      features: ['500 Exams/month', 'Advanced AI + Rubric Engine', 'Batch Grading', 'Priority Support', '50GB Storage', 'Analytics Dashboard', 'API Access'],
+      perPaper: annual ? '₹4/paper' : '₹5/paper',
+      save: annual ? 'Save ₹6,000/yr' : null,
+      annualTotal: annual ? '₹23,988/yr' : null,
+      features: ['500 AI Evaluations/month', 'Batch Upload', 'Analytics Dashboard', 'Priority Support', 'Personalized Feedback', 'Rubric Evaluation', 'PDF Export'],
       tag: 'Most Popular',
       cta: 'Get Started',
     },
     {
-      name: 'Institution',
-      desc: 'For universities & colleges',
-      price: 'Custom',
-      period: '',
-      features: ['Unlimited Exams', 'Custom AI Model Training', 'SSO & LMS Integration', 'Dedicated Account Manager', 'Unlimited Storage', 'SLA Guarantee', 'On-Premise Option'],
-      cta: 'Contact Sales',
+      name: 'Advanced',
+      desc: 'For universities & institutions',
+      price: annual ? '₹3,999' : '₹4,999',
+      period: '/month',
+      perPaper: annual ? '₹3.3/paper' : '₹4.2/paper',
+      save: annual ? 'Save ₹12,000/yr' : null,
+      annualTotal: annual ? '₹47,988/yr' : null,
+      features: ['1,200 AI Evaluations/month', 'Multi-Faculty Access', 'Advanced Analytics', 'Batch Upload', 'Personalized Feedback', 'Rubric Evaluation', 'PDF Export', 'Dedicated Support'],
+      cta: 'Get Started',
     },
   ];
 
@@ -91,16 +98,16 @@ const Pricing = () => {
           <span className="text-xs font-bold text-emerald-700">Every user gets 3 free evaluations daily — no card needed!</span>
         </div>
 
-        {/* Toggle */}
+        {/* Annual / Monthly Toggle */}
         <div className="flex items-center justify-center gap-4 mt-8">
-          <span className={`text-sm font-bold ${!annual ? 'text-on-surface' : 'text-outline'}`}>Monthly</span>
+          <span className={`text-sm font-bold transition-colors ${!annual ? 'text-on-surface' : 'text-outline'}`}>Monthly</span>
           <button
             onClick={() => setAnnual(!annual)}
-            className={`toggle-switch relative w-14 h-7 rounded-full transition-colors flex-shrink-0 ${annual ? 'bg-primary' : 'bg-surface-container-highest'}`}
+            className={`relative w-14 h-7 rounded-full transition-colors flex-shrink-0 ${annual ? 'bg-primary' : 'bg-surface-container-highest'}`}
           >
             <div className={`absolute top-1 w-5 h-5 rounded-full bg-white shadow-md transition-transform ${annual ? 'left-8' : 'left-1'}`} />
           </button>
-          <span className={`text-sm font-bold ${annual ? 'text-on-surface' : 'text-outline'}`}>Annual</span>
+          <span className={`text-sm font-bold transition-colors ${annual ? 'text-on-surface' : 'text-outline'}`}>Annual</span>
           {annual && <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">Save 20%</span>}
         </div>
       </div>
@@ -128,7 +135,11 @@ const Pricing = () => {
                 <span className="text-4xl font-black font-headline">{plan.price}</span>
                 <span className="text-outline font-bold text-sm">{plan.period}</span>
               </div>
-              {plan.save && <p className="text-[10px] font-bold text-emerald-600 mt-1">{plan.save}</p>}
+              <div className="flex flex-wrap items-center gap-2 mt-1">
+                {plan.perPaper && <span className="text-[10px] font-bold text-emerald-600">As low as {plan.perPaper}</span>}
+                {plan.save && <span className="text-[10px] font-bold text-white bg-emerald-500 px-1.5 py-0.5 rounded">{plan.save}</span>}
+              </div>
+              {plan.annualTotal && <p className="text-[10px] text-outline mt-1">Billed as {plan.annualTotal}</p>}
             </div>
 
             <ul className="space-y-3 mb-8 flex-1">
@@ -224,9 +235,9 @@ const Pricing = () => {
           {[
             { q: 'How many free evaluations do I get?', a: 'Every user gets 3 free evaluations per day. No credit card or signup fees required.' },
             { q: 'Is GST included in the pricing?', a: 'No, GST @18% is applicable on all plans and will be added at checkout.' },
+            { q: 'What are the plan limits?', a: 'Starter: 150 papers/month, Professional: 500 papers/month, Advanced: 1,200 papers/month.' },
             { q: 'Can I switch plans anytime?', a: 'Yes. Upgrade or downgrade anytime. Pro-rata adjustments are applied automatically.' },
-            { q: 'Do you offer a free trial?', a: 'Yes, the Starter plan comes with a 14-day free trial. No credit card required.' },
-            { q: 'What payment methods do you accept?', a: 'We accept UPI, Net Banking, Credit/Debit Cards, and wire transfers for Institution plans.' },
+            { q: 'What payment methods do you accept?', a: 'We accept UPI, Net Banking, Credit/Debit Cards, and wire transfers.' },
           ].map((item) => (
             <details key={item.q} className="bg-white rounded-xl atmospheric-shadow border border-outline-variant/10 group">
               <summary className="px-6 py-5 cursor-pointer font-bold text-sm text-on-surface flex justify-between items-center list-none">

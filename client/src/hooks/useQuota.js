@@ -9,6 +9,7 @@ export const useQuota = () => {
   const remaining = useQuotaStore((s) => s.remaining);
   const plan = useQuotaStore((s) => s.plan);
   const subscribed = useQuotaStore((s) => s.subscribed);
+  const isMonthly = useQuotaStore((s) => s.isMonthly);
   const expiresAt = useQuotaStore((s) => s.expiresAt);
   const loaded = useQuotaStore((s) => s.loaded);
   const decrementRemaining = useQuotaStore((s) => s.decrementRemaining);
@@ -37,6 +38,7 @@ export const useQuota = () => {
     remaining,
     plan,
     subscribed,
+    isMonthly,
     expiresAt,
     loaded,
     decrementRemaining,
