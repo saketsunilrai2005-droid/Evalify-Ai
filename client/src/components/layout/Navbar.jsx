@@ -17,6 +17,7 @@ const Navbar = ({ onMenuClick }) => {
       '/evaluation-progress': 'Evaluation',
       '/settings': 'Settings',
       '/pricing': 'Pricing',
+      '/analytics': 'Analytics',
     };
     if (location.pathname.startsWith('/exams/')) return 'Exam Detail';
     return map[location.pathname] || 'Evalify AI';

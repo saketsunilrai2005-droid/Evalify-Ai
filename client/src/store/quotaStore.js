@@ -6,6 +6,7 @@ export const useQuotaStore = create((set) => ({
   remaining: 3,
   plan: 'free',
   subscribed: false,
+  isMonthly: false,
   expiresAt: null,
   loaded: false,
 
@@ -15,6 +16,7 @@ export const useQuotaStore = create((set) => ({
     remaining: data.remaining ?? 3,
     plan: data.plan ?? 'free',
     subscribed: data.subscribed ?? false,
+    isMonthly: data.isMonthly ?? false,
     expiresAt: data.expiresAt ?? null,
     loaded: true,
   }),

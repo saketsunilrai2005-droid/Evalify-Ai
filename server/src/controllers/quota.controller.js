@@ -14,7 +14,7 @@ async function getQuota(req, res, next) {
 
     res.json({
       ...quota,
-      plan: subscription ? subscription.plan : 'free',
+      plan: quota.plan || (subscription ? subscription.plan : 'free'),
       subscribed: !!subscription,
       expiresAt: subscription?.expires_at || null,
     });

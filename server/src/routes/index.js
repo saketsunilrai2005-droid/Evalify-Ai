@@ -4,6 +4,7 @@ const examRoutes = require('./exam.routes');
 const evaluateRoutes = require('./evaluate.routes');
 const resultsRoutes = require('./results.routes');
 const quotaRoutes = require('./quota.routes');
+const analyticsRoutes = require('./analytics.routes');
 const GeminiService = require('../services/geminiService');
 const ExamModel = require('../models/exam.model');
 const logger = require('../utils/logger');
@@ -15,6 +16,7 @@ router.use('/exams', examRoutes);
 router.use('/evaluate', evaluateRoutes);
 router.use('/results', resultsRoutes);
 router.use('/quota', quotaRoutes);
+router.use('/analytics', analyticsRoutes);
 
 // Health check
 router.get('/health', (req, res) => {

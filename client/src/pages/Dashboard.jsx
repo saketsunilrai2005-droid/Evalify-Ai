@@ -10,7 +10,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { exams, loading, fetchExams } = useExam();
-  const { remaining, limit, plan, fetchQuota } = useQuota();
+  const { remaining, limit, plan, isMonthly, fetchQuota } = useQuota();
 
   useEffect(() => {
     fetchExams();
@@ -48,6 +48,9 @@ const Dashboard = () => {
     failed: 'Failed',
   };
 
+  const quotaLabel = isMonthly ? 'Monthly Quota' : 'Daily Quota';
+  const quotaSubValue = plan === 'free' ? 'Free Tier' : `${plan.charAt(0).toUpperCase() + plan.slice(1)} Plan`;
+
   return (
     <div className="min-h-full">
       <div className="mb-6 sm:mb-10">
@@ -60,7 +63,7 @@ const Dashboard = () => {
         <ScoreCard label="Total Exams" value={String(totalExams)} icon="menu_book" color="primary" subValue="All Time" />
         <ScoreCard label="Completed" value={String(completedExams)} icon="task_alt" color="secondary" subValue={totalExams > 0 ? `${Math.round((completedExams / totalExams) * 100)}%` : '—'} />
         <ScoreCard label="Pending" value={String(pendingExams)} icon="pending_actions" color="error" subValue={pendingExams > 0 ? 'In Progress' : 'None'} />
-        <ScoreCard label="Daily Quota" value={`${remaining}/${limit}`} icon="toll" color={remaining > 0 ? 'success' : 'error'} subValue={plan === 'free' ? 'Free Tier' : plan} />
+        <ScoreCard label={quotaLabel} value={`${remaining}/${limit}`} icon="toll" color={remaining > 0 ? 'success' : 'error'} subValue={quotaSubValue} />
       </div>
 
       {/* Chart Area + Quick Actions */}

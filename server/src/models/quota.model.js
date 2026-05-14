@@ -2,6 +2,13 @@ const supabase = require('../config/supabase');
 
 const FREE_DAILY_LIMIT = 3;
 
+// Monthly evaluation limits per plan
+const PLAN_LIMITS = {
+  starter: 150,
+  professional: 500,
+  advanced: 1200,
+};
+
 const QuotaModel = {
   /**
    * Get today's usage count for a user.
@@ -99,31 +106,72 @@ const QuotaModel = {
   },
 
   /**
-   * Get daily limit for a user.
+   * Get this month's usage count for a user.
    */
-  async getDailyLimit(userId) {
+  async getMonthUsage(userId) {
+    const monthStart = new Date();
+    monthStart.setDate(1);
+    monthStart.setHours(0, 0, 0, 0);
+
+    try {
+      const { data: exams, error: examErr } = await supabase
+        .from('exams')
+        .select('id')
+        .eq('created_by', userId);
+
+      if (examErr || !exams || exams.length === 0) return 0;
+
+      const examIds = exams.map(e => e.id);
+
+      const { count, error } = await supabase
+        .from('evaluations')
+        .select('id', { count: 'exact', head: true })
+        .in('exam_id', examIds)
+        .gte('created_at', monthStart.toISOString());
+
+      if (error) return 0;
+      return count || 0;
+    } catch {
+      return 0;
+    }
+  },
+
+  /**
+   * Get limit for a user based on plan.
+   * Free tier: 3 per day. Paid plans: monthly limit from PLAN_LIMITS.
+   */
+  async getLimit(userId) {
     const sub = await this.getSubscription(userId);
     if (sub && new Date(sub.expires_at) > new Date()) {
-      return sub.daily_limit || 999;
+      return {
+        limit: PLAN_LIMITS[sub.plan] || sub.daily_limit || 150,
+        plan: sub.plan,
+        isMonthly: true,
+      };
     }
-    return FREE_DAILY_LIMIT;
+    return { limit: FREE_DAILY_LIMIT, plan: 'free', isMonthly: false };
   },
 
   /**
    * Check if user can evaluate (has remaining quota).
-   * Returns { allowed, used, limit, remaining }
+   * Free tier: daily check. Paid plans: monthly check.
+   * Returns { allowed, used, limit, remaining, plan, isMonthly }
    */
   async checkQuota(userId) {
-    const [used, limit] = await Promise.all([
-      this.getTodayUsage(userId),
-      this.getDailyLimit(userId),
-    ]);
+    const limitInfo = await this.getLimit(userId);
+
+    // Free tier uses daily usage, paid uses monthly
+    const used = limitInfo.isMonthly
+      ? await this.getMonthUsage(userId)
+      : await this.getTodayUsage(userId);
 
     return {
-      allowed: used < limit,
+      allowed: used < limitInfo.limit,
       used,
-      limit,
-      remaining: Math.max(0, limit - used),
+      limit: limitInfo.limit,
+      remaining: Math.max(0, limitInfo.limit - used),
+      plan: limitInfo.plan,
+      isMonthly: limitInfo.isMonthly,
     };
   },
 };
